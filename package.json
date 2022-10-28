@@ -1,6 +1,17 @@
 {
+  "scripts": {
+    "checkbayc": "node scripts/checkStakingCommand bayc",
+    "checkmayc": "node scripts/checkStakingCommand mayc",
+    "checkbakc": "node scripts/checkStakingCommand bakc",
+    "test": "mocha --timeout 500000"
+  },
   "dependencies": {
     "dotenv": "^16.0.3",
-    "ethers": "^5.7.2"
+    "ethers": "^5.7.2",
+    "fs": "^0.0.1-security"
+  },
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "mocha": "^10.1.0"
   }
 }
