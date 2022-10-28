@@ -40,7 +40,7 @@ Output:
 
 From code:
 ```js
-const stakedNfts = await checkStaking("bayc", [47, 195]);
+const nfts = await checkStaking("bayc", [47, 195]);
 ```
 
 ### Checking Mutant Ape Yacht Club
@@ -69,7 +69,7 @@ Output:
 
 From code:
 ```js
-const stakedNfts = await checkStaking("mayc", [16, 30]);
+const nfts = await checkStaking("mayc", [16, 30]);
 ```
 
 ### Checking Bored Ape Kennel Club
@@ -98,6 +98,6 @@ Output:
 
 From code:
 ```js
-const stakedNfts = await checkStaking("bakc", [12, 50]);
+const nfts = await checkStaking("bakc", [12, 50]);
 ```
 
