@@ -1,18 +1,21 @@
 require("dotenv").config();
 
 const stakingConfig = {
+  // Bored Ape Yacht Club
   bayc: {
     poolId: 1,
     contractAddress: process.env.APECOIN_STAKING_MAINNET_CONTRACT_ADDRESS
       ? process.env.BAYC_MAINNET_CONTRACT_ADDRESS
       : process.env.BAYC_GOERLI_CONTRACT_ADDRESS,
   },
+  // Mutant Ape Yacht Club
   mayc: {
     poolId: 2,
     contractAddress: process.env.APECOIN_STAKING_MAINNET_CONTRACT_ADDRESS
       ? process.env.MAYC_MAINNET_CONTRACT_ADDRESS
       : process.env.MAYC_GOERLI_CONTRACT_ADDRESS,
   },
+  // Bored Ape Kennel Club
   bakc: {
     poolId: 3,
     contractAddress: process.env.APECOIN_STAKING_MAINNET_CONTRACT_ADDRESS
