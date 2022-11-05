@@ -46,22 +46,16 @@ describe("checkStaking test", async () => {
       await txResponse.wait();
 
       // check staking data
-      const stakedNft = (await checkStaking("bayc", [tokenId]))[0];
       console.log("Staked NFT:");
-      console.log(stakedNft);
+      const stakedNft = (await checkStaking("bayc", [tokenId]))[0];
 
       // remove "APE" and the decimal point from stakedNft.stakedAmount
       const stakedAmount = BigNumber.from(
         stakedNft.stakedAmount.split(" ")[0].split(".")[0]
       );
-      // remove "APE" and the decimal point from stakedNft.rewards
-      const rewards = BigNumber.from(
-        stakedNft.rewards.split(" ")[0].split(".")[0]
-      );
 
       assert.equal(stakedNft.tokenId, tokenId);
       assert.equal(stakedAmount.toString(), amountToStake);
-      assert.isTrue(rewards.gt(0));
     });
   });
 });

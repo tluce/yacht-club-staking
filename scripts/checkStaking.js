@@ -25,10 +25,22 @@ const checkStaking = async (collectionName, tokens) => {
 
   // get the staking contract
   const provider = new ethers.providers.JsonRpcProvider(ETHEREUM_RPC_URL);
-  const abi = fs.readFileSync("./abi/ApeCoinStakingLight.abi.json", "utf8");
+  const stakingAbi = fs.readFileSync(
+    "./abi/ApeCoinStakingLight.abi.json",
+    "utf8"
+  );
   const stakingContract = new ethers.Contract(
     STAKING_CONTRACT_ADDRESS,
-    abi,
+    stakingAbi,
+    provider
+  );
+
+  // abi only used to get the owner of an NFT
+  // the same one is used for BAYC, MAYC and BAKC
+  const nftAbi = fs.readFileSync("./abi/Bayc.abi.json", "utf8");
+  const nftContract = new ethers.Contract(
+    stakingConfig[nftCollection].contractAddress,
+    nftAbi,
     provider
   );
 
@@ -41,23 +53,55 @@ const checkStaking = async (collectionName, tokens) => {
         stakingConfig[nftCollection].poolId,
         tokenId
       );
+      const pendingRewards = await getPendingRewards(
+        stakingContract,
+        nftContract,
+        stakingConfig[nftCollection].poolId,
+        tokenId
+      );
       const stakingData = {
         tokenId: tokenId,
         stakedAmount: `${ethers.utils.formatUnits(
           nftPosition.stakedAmount,
           APE_COIN_PRECISION
         )} APE`,
-        rewards: `${ethers.utils.formatUnits(
-          nftPosition.rewardsDebt,
+        pendingRewards: `${ethers.utils.formatUnits(
+          pendingRewards,
           APE_COIN_PRECISION
         )} APE`,
         url: `${OPENSEA_URL}/${stakingConfig[nftCollection].contractAddress}/${tokenId}`,
       };
+      console.log(stakingData);
       result.push(stakingData);
     }
   }
 
   return result;
+};
+
+/**
+ * Returns the pending rewards of an NFT in wei units.
+ *
+ * @param {Contract} stakingContract The APE coin contract.
+ * @param {Contract} nftContract The contract of the NFT collection.
+ * The collection can be BAYC, MAYC or BAKC.
+ * @param {Number} poolId The pool ID of the NFT collection.
+ * @param {Number} tokenId The ID of the NFT.
+ * @return {BigNumber} the pending rewards of the NFT.
+ */
+const getPendingRewards = async (
+  stakingContract,
+  nftContract,
+  poolId,
+  tokenId
+) => {
+  const nftOwner = await nftContract.ownerOf(tokenId);
+  const pendingRewards = await stakingContract.pendingRewards(
+    poolId,
+    nftOwner,
+    tokenId
+  );
+  return pendingRewards;
 };
 
 module.exports = { checkStaking };
